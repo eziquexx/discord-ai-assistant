@@ -1,0 +1,30 @@
+# env, 환경 변수
+.env
+.env.*
+!.env.example
+
+# google auth, Google 인증 파일
+credentials.json
+client_secret*.json
+token.json
+
+# database, 데이터베이스
+*.db
+*.sqlite
+*.sqlite3
+data/
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# logs
+*.log
+logs/
+
+# os/editor
+.DS_Store
+.vscode/
+.idea/
