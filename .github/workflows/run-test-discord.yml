@@ -3,7 +3,7 @@ name: Run Test Discord Job
 on:
   workflow_dispatch:
   schedule:
-    - cron: "35 16 * * *"  # KST 01:35
+    - cron: "30 21 * * *"  # KST 06:30
 
 jobs:
   test-discord:
