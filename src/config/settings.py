@@ -11,7 +11,7 @@ class Settings(BaseSettings):
       extra="ignore",
     )
 
-    discord_webhook_url: str = Field(..., alias="DISCORD_WEBHOK_URL")
+    discord_webhook_url: str = Field(..., alias="DISCORD_WEBHOOK_URL")
     app_env: str = Field(default="local", alias="APP_ENV")
     timezone: str = Field(default="Asia/Seoul", alias="TIMEZONE")
 
