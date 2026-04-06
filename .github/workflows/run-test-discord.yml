@@ -1,0 +1,30 @@
+name: Run Test Discord Job
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  test-discord:
+    runs-one: ubunu-latest
+
+    env:
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      APP_ENV: github
+      TIMEZONE: Asia/Seoul
+
+    steps:
+      - name: Chekcout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run test discord job
+        run: python main.py --job test_discord
