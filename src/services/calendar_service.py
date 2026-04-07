@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from src.clients.google_calendar_client import google_calendar_client
 from src.repositories.calendar_event_repository import calendar_event_repository
@@ -60,6 +60,42 @@ class CalendarService:
             )
 
         logger.info("Calendar sync completed: %s events processed", len(events))
+        
+    
+    # 조회 일정 목록
+    def get_events_by_range(self, start_dt: datetime, end_dt: datetime) -> list:
+        time_min = to_isoformat_utc(start_dt)
+        time_max = to_isoformat_utc(end_dt)
 
+        events = google_calendar_client.fetch_upcoming_events(
+            time_min=time_min,
+            time_max=time_max,
+        )
+        return events
+
+# 조회 일정 메시지 포맷팅
+def format_events_message(title: str, events: list) -> str:
+    if not events:
+        return f"[{title}]\n등록된 일정이 없습니다."
+
+    lines = [f"[{title}]"]
+    for event in events:
+        start_info = event.get("start", {})
+
+        # 시간 있는 일정
+        if "dateTime" in start_info:
+            dt = start_info["dateTime"]
+            # 2026-04-09T22:30 → 2026-04-09 22:30
+            event_time = dt[:16].replace("T", " ")
+
+        # 종일 일정
+        else:
+            event_time = start_info.get("date", "")
+
+        event_title = event.get("summary", "(제목 없음)")
+
+        lines.append(f"- {event_time} {event_title}")
+
+    return "\n".join(lines)
 
 calendar_service = CalendarService()

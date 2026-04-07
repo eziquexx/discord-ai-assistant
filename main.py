@@ -30,6 +30,12 @@ def run(job: str) -> None:
         calendar_reminder_service.send_reminders()
         return
 
+    # 디스코드 봇 실행 (이 작업은 일반적으로 GitHub Actions에서 실행하지 않고, 로컬이나 별도의 서버에서 항상 켜두는 형태로 운영할 예정)
+    if job == "run_discord_bot":
+        from src.clients.discord_bot_client import run_bot
+        run_bot()
+        return
+
     raise ValueError(f"Unknown job: {job}")
 
 

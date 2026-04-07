@@ -24,6 +24,7 @@ class Settings(BaseSettings):
       default=None,
       alias="GOOGLE_SERVICE_ACCOUNT_JSON"
     )
+    discord_bot_token: str = Field(..., alias="DISCORD_BOT_TOKEN")
 
 
 settings = Settings()
