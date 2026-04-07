@@ -15,6 +15,15 @@ class Settings(BaseSettings):
     app_env: str = Field(default="local", alias="APP_ENV")
     timezone: str = Field(default="Asia/Seoul", alias="TIMEZONE")
     db_path: str = Field(default="data/assistant.db", alias="DB_PATH")
+    google_calendar_id: str = Field(..., alias="GOOGLE_CALENDAR_ID")
+    google_service_account_file: str = Field(
+        default="credentials/google-service-account.json",
+        alias="GOOGLE_SERVICE_ACCOUNT_FILE"
+    )
+    google_service_account_json: str | None = Field(
+      default=None,
+      alias="GOOGLE_SERVICE_ACCOUNT_JSON"
+    )
 
 
 settings = Settings()

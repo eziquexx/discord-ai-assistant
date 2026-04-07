@@ -3,6 +3,7 @@ import argparse
 from src.services.notification_service import notification_service
 from src.utils.logger import get_logger
 from src.services.db_service import db_service
+from src.services.calendar_service import calendar_service
 
 logger = get_logger(__name__)
 
@@ -13,6 +14,10 @@ def run(job: str) -> None:
 
     if job == "init_db":
         db_service.initialize()
+        return
+
+    if job == "sync_calendar":
+        calendar_service.sync_events()
         return
 
     raise ValueError(f"Unknown job: {job}")
