@@ -7,6 +7,7 @@
 credentials.json
 client_secret*.json
 token.json
+/credentials/
 
 # database, 데이터베이스
 *.db
