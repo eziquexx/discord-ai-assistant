@@ -1,4 +1,5 @@
 from datetime import datetime
+from src.utils.datetime_utils import parse_google_datetime
 
 from src.repositories.base_repository import BaseRepository
 
@@ -102,6 +103,66 @@ class CalendarEventRepository(BaseRepository):
                         now_at.isoformat(),
                         delete_after.isoformat(),
                     ),
+                )
+
+            connection.commit()
+        finally:
+            connection.close()
+
+
+
+    def find_reminder_targets(self, now_at: datetime):
+        connection = self.get_connection()
+
+        try:
+            cursor = connection.execute(
+                """
+                SELECT *
+                FROM calendar_events
+                WHERE end_at >= ?
+                ORDER BY start_at ASC
+                """,
+                (now_at.isoformat(),),
+            )
+            return cursor.fetchall()
+        finally:
+            connection.close()
+
+
+    def mark_notified(self, event_id: int, notification_type: str, now_at: datetime) -> None:
+        connection = self.get_connection()
+
+        try:
+            if notification_type == "calendar_7d":
+                connection.execute(
+                  """
+                  UPDATE calendar_events
+                  SET notified_7d = 1,
+                      updated_at = ?
+                  WHERE id = ?
+                  """,
+                  (now_at.isoformat(), event_id),
+                )
+            elif notification_type == "calendar_3d":
+                  connection.execute(
+                      """
+                      UPDATE calendar_events
+                      SET notified_3d = 1,
+                          updated_at = ?
+                      WHERE id = ?
+                      """,
+                      (now_at.isoformat(), event_id),
+                  )
+
+            elif notification_type == "calendar_1d":
+                connection.execute(
+                    """
+                    UPDATE calendar_events
+                    SET notified_1d = 1,
+                        updated_at = ?
+                    WHERE id = ?
+                    """,
+                    (now_at.isoformat(), event_id),
                 )
 
             connection.commit()

@@ -27,5 +27,6 @@ class DiscordClient:
             )
 
         logger.info("Discord message sent successfully")
+        return response
 
 discord_client = DiscordClient(settings.discord_webhook_url)
