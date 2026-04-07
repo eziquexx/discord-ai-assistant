@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     discord_webhook_url: str = Field(..., alias="DISCORD_WEBHOOK_URL")
     app_env: str = Field(default="local", alias="APP_ENV")
     timezone: str = Field(default="Asia/Seoul", alias="TIMEZONE")
+    db_path: str = Field(default="data/assistant.db", alias="DB_PATH")
 
 
 settings = Settings()
