@@ -1,7 +1,9 @@
-name: Run Test Discord Job
+name: Run Daily RSS Digest
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '30 21 * * *'
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -9,11 +11,12 @@ env:
   APP_ENV: github
   TIMEZONE: Asia/Seoul
   DB_PATH: data/assistant.db
+  RSS_FEED_URLS: ${{ secrets.RSS_FEED_URLS }}
   GOOGLE_CALENDAR_ID: ${{ secrets.GOOGLE_CALENDAR_ID }}
   DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
 
 jobs:
-  test-discord:
+  daily-rss-digest:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,5 +31,8 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run test discord job
-        run: python main.py --job test_discord
+      - name: Init DB
+        run: python main.py --job init_db
+
+      - name: Run daily RSS digest
+        run: python main.py --job send_daily_rss_digest
