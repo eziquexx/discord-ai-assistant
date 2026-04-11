@@ -1,4 +1,4 @@
-from src.clients.discord_client import discord_client
+from src.clients.discord.webhook_client import discord_client
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)

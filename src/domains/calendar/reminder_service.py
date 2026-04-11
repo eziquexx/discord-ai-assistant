@@ -1,6 +1,6 @@
-from src.clients.discord_client import discord_client
-from src.repositories.calendar_event_repository import calendar_event_repository
-from src.repositories.notification_log_repository import notification_log_repository
+from src.clients.discord.webhook_client import discord_client
+from src.domains.calendar.repository import calendar_event_repository
+from src.domains.notification.repository import notification_log_repository
 from src.utils.datetime_utils import (
     days_until,
     get_calendar_notification_type,

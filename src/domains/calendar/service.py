@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
-from src.clients.google_calendar_client import google_calendar_client
-from src.repositories.calendar_event_repository import calendar_event_repository
+from src.clients.google.calendar_client import google_calendar_client
+from src.domains.calendar.repository import calendar_event_repository
 from src.utils.datetime_utils import (
     calculate_delete_after,
     now_kst,

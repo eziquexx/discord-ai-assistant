@@ -1,4 +1,5 @@
 from datetime import datetime
+import sqlite3
 
 from src.repositories.base_repository import BaseRepository
 
@@ -172,5 +173,49 @@ class ContentRepository(BaseRepository):
         finally:
             connection.close()
 
+    def find_contents_between(self, start_at: datetime, end_at: datetime) -> list[dict]:
+        connection = self.get_connection()
+        connection.row_factory = sqlite3.Row
+
+        try:
+            cursor = connection.cursor()
+            cursor.execute(
+                """
+                SELECT
+                    id,
+                    source_name,
+                    title,
+                    url,
+                    published_at,
+                    collected_at
+                FROM contents
+                WHERE published_at >= ?
+                  AND published_at < ?
+                ORDER BY published_at DESC
+                """,
+                (start_at, end_at),
+            )
+            rows = cursor.fetchall()
+            return [dict(row) for row in rows]
+        finally:
+            connection.close()
+
+    def delete_contents_older_than(self, cutoff_at: datetime) -> int:
+        connection = self.get_connection()
+
+        try:
+            cursor = connection.cursor()
+            cursor.execute(
+                """
+                DELETE FROM contents
+                WHERE collected_at < ?
+                """,
+                (cutoff_at,),
+            )
+            deleted_count = cursor.rowcount
+            connection.commit()
+            return deleted_count
+        finally:
+            connection.close()
 
 content_repository = ContentRepository()

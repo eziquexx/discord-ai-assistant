@@ -1,4 +1,4 @@
-from src.services.calendar_service import CalendarService, format_events_message
+from src.domains.calendar.service import CalendarService, format_events_message
 from src.utils.datetime_utils import get_today_range, get_this_week_range, get_this_month_range
 
 calendar_service = CalendarService()

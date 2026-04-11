@@ -1,7 +1,7 @@
 import discord
 from src.config.settings import settings
 from src.utils.logger import get_logger
-from src.handlers.command_handler import handle_command
+from src.handlers.discord_command_handler import handle_command
 
 logger = get_logger(__name__)
 
