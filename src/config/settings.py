@@ -24,6 +24,7 @@ class Settings(BaseSettings):
       default=None,
       alias="GOOGLE_SERVICE_ACCOUNT_JSON"
     )
+    rss_feed_urls: str = Field(default="", alias="RSS_FEED_URLS")
     discord_bot_token: str = Field(..., alias="DISCORD_BOT_TOKEN")
 
 

@@ -1,0 +1,40 @@
+name: Run Content Alert Job
+
+on:
+  workflow_dispatch:
+
+jobs:
+  content-alert:
+    runs-on: ubuntu-latest
+
+    env:
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      APP_ENV: github
+      TIMEZONE: Asia/Seoul
+      DB_PATH: data/assistant.db
+      GOOGLE_CALENDAR_ID: ${{ secrets.GOOGLE_CALENDAR_ID }}
+      GOOGLE_SERVICE_ACCOUNT_FILE: credentials/google-service-account.json
+      RSS_FEED_URLS: ${{ secrets.RSS_FEED_URLS }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: pip install -r requirements.txt
+
+      - name: Create credentials file
+        run: |
+          mkdir -p credentials
+          echo '${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}' > credentials/google-service-account.json
+
+      - name: Init DB
+        run: python main.py --job init_db
+
+      - name: Collect contents
+        run: python main.py --job collect_contents
+
+      - name: Send content alerts
+        run: python main.py --job send_content_alerts

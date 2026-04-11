@@ -44,6 +44,25 @@ def get_calendar_notification_type(days_left: int) -> str | None:
     return None
 
 
+def parse_rss_published_datetime(entry) -> datetime | None:
+    published_parsed = getattr(entry, "published_parsed", None)
+    updated_parsed = getattr(entry, "updated_parsed", None)
+
+    target = published_parsed or updated_parsed
+    if target is None:
+        return None
+
+    return datetime(
+        year=target.tm_year,
+        month=target.tm_mon,
+        day=target.tm_mday,
+        hour=target.tm_hour,
+        minute=target.tm_min,
+        second=target.tm_sec,
+        tzinfo=timezone.utc,
+    ).astimezone(KST)
+
+
 # 오늘 일정
 def get_today_range():
     now = datetime.now()
