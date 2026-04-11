@@ -32,12 +32,22 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Create credentials file
-        shell: bash
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
         run: |
           mkdir -p credentials
-          cat <<'EOF' > credentials/google-service-account.json
-          ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-          EOF
+          python - <<'PY'
+          import os
+          import json
+          from pathlib import Path
+
+          raw = os.environ["GOOGLE_SERVICE_ACCOUNT_JSON"]
+          data = json.loads(raw)  # 여기서 JSON 형식 검증
+          Path("credentials/google-service-account.json").write_text(
+              json.dumps(data),
+              encoding="utf-8"
+          )
+          PY
 
       - name: Init DB
         run: python main.py --job init_db
